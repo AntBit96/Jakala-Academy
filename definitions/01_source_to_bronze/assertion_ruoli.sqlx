@@ -1,0 +1,7 @@
+config {
+  type: "assertion"
+}
+
+SELECT *
+FROM ${ref("bronze_anagrafica")}
+WHERE ruolo NOT IN ("Studente","Professore")

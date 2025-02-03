@@ -1,0 +1,25 @@
+config {
+    type: "table",
+    schema: config.dataset_dest_name,
+    name: "anagrafica_docenti",
+    tags: ["silver_to_gold", "main_pipeline"],
+}
+
+WITH
+  NUMERO_CORSI AS (
+  SELECT
+    id_professore,
+    count (distinct id_professore) AS n_corsi
+  FROM
+    ${ref(config.dataset_dest_name, "silver_corsi")} 
+  GROUP BY id_professore
+)
+SELECT
+  ANAG.*,
+  IFNULL(n_corsi,0) AS n_corsi
+FROM
+  ${ref(config.dataset_dest_name, "silver_anagrafica")} AS ANAG
+  LEFT JOIN 
+  NUMERO_CORSI ON ANAG.id=NUMERO_CORSI.id_professore
+WHERE 
+  ruolo="Professore"
