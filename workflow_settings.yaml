@@ -1,0 +1,7 @@
+defaultProject: jit-training-dma
+defaultLocation: EU
+defaultDataset: dataform
+defaultAssertionDataset: dataform_assertions
+dataformCoreVersion: 3.0.0
+vars:
+    destination_dataset: "academy_2025"
