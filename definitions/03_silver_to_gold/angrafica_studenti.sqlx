@@ -1,0 +1,39 @@
+
+-- Creare vista anagrafica studenti, con numero di corsi seguiti, 
+-- media dei voti, corso preferito (quello a cui ha preso il voto più alto),
+-- numero bocciature (voti<18)
+
+config {
+    type: "table",
+    schema: config.dataset_dest_name,
+    name: "anagrafica_studenti",
+    tags: ["silver_to_gold", "main_pipeline"],
+}
+
+WITH 
+  CORSI_SEGUITI AS (
+  SELECT 
+  id_studente,
+  count(*) as numero_corsi,
+  avg(voto)as avg_voto,
+  MAX(voto) as max_voto,
+  SUM(CASE WHEN voto < 18 THEN 1 
+           ELSE 0 
+           END) AS numero_bocciature
+  FROM  ${ref(config.dataset_dest_name, "silver_voti")} 
+  GROUP BY id_studente
+)
+SELECT
+  id,
+  nome,
+  cognome,
+  ruolo,
+  IFNULL(numero_corsi,0) AS numero_corsi,
+  avg_voto,
+  max_voto,
+  numero_bocciature
+FROM  ${ref(config.dataset_dest_name, "silver_anagrafica")}  AS ANAG
+  LEFT JOIN CORSI_SEGUITI 
+   ON ANAG.id = CORSI_SEGUITI.id_studente
+WHERE 
+  ruolo="Studente"
