@@ -14,11 +14,10 @@ WITH
 )
 SELECT
   corsi.*,
-
-
+  numero_ore_previste-orefatte.ore as tempo_rimasto
 FROM
   ${ref(config.dataset_dest_name, "silver_corsi")} AS corsi
   LEFT JOIN 
-  orefatte ON corsi.id_corso = orefatte.id_corso
+  orefatte ON corsi.id = orefatte.id_corso
 WHERE 
 1=1
