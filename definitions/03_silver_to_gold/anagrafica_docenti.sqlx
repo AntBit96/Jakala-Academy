@@ -9,7 +9,7 @@ WITH
   NUMERO_CORSI AS (
   SELECT
     id_professore,
-    count (distinct id_professore) AS n_corsi
+    count (distinct id) AS n_corsi
   FROM
     ${ref(config.dataset_dest_name, "silver_corsi")} 
   GROUP BY id_professore
