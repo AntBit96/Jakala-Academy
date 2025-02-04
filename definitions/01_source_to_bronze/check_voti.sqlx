@@ -1,0 +1,8 @@
+config {
+  type: "assertion"
+}
+
+SELECT *
+FROM ${ref("bronze_voti")}
+WHERE 1=1
+and ( voto < 0 or voto > 30 )
