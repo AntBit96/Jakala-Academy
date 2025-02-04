@@ -1,0 +1,24 @@
+config {
+    type: "table",
+    schema: config.dataset_dest_name,
+    name: "corsi_gold",
+    tags: ["silver_to_gold", "main_pipeline"],
+}
+
+WITH
+  orefatte AS (
+    select id_corso, 
+    sum(durata_ore) as ore
+    from ${ref(config.dataset_dest_name, "silver_corsi")} 
+    group by id_corso
+)
+SELECT
+  corsi.*,
+
+
+FROM
+  ${ref(config.dataset_dest_name, "silver_corsi")} AS corsi
+  LEFT JOIN 
+  orefatte ON corsi.id_corso = orefatte.id_corso
+WHERE 
+1=1
