@@ -7,17 +7,18 @@ config {
 
 WITH
   orefatte AS (
-    select id,
-    sum(numero_ore_previste) as ore
-    from  ${ref(config.dataset_dest_name, "silver_corsi")} 
-    group by id
+select id_corso, 
+sum(durata_ore) ore 
+from jit-training-dma.accademy_riccardo.silver_calendario
+group by id_corso
 )
 SELECT
   corsi.*,
-  CAST(numero_ore_previste AS INT64)-orefatte.ore as tempo_rimasto
+  --orefatte.ore 
+  COALESCE((CAST(numero_ore_previste AS INT64)-orefatte.ore),numero_ore_previste) as tempo_rimasto
 FROM
    ${ref(config.dataset_dest_name, "silver_corsi")}  AS corsi
   LEFT JOIN 
-  orefatte ON corsi.id = orefatte.id
+  orefatte ON corsi.id = orefatte.id_corso
 WHERE 
 1=1
