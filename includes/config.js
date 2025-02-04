@@ -19,7 +19,7 @@ const tables = [{
         name: "voti",
         update_mode: "incremental",
         keys: ["data_calendario", "id_corso","id_studente"]
-    },
+    }
 ]
 
 
