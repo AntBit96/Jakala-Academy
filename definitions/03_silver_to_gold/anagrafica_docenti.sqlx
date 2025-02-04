@@ -1,7 +1,7 @@
 config {
     type: "table",
     schema: config.dataset_dest_name,
-    name: "anagrafica_docenti",
+    name: "anagrafica_docenti_gold",
     tags: ["silver_to_gold", "main_pipeline"],
 }
 
